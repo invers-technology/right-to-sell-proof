@@ -1,14 +1,77 @@
 {
   "name": "rts",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Smart Contract-based Right to Sell Proof on Supplychain",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
+    "compile": "hardhat compile",
+    "build": "tsc -p tsconfig.json && cp node_modules/rts-core/dist/Rts.json dist/Rts.json",
+    "deploy": "rm -rf ignition/deployments && hardhat ignition deploy ignition/modules/deploy.ts --network",
+    "clean": "rm -rf verification_keys wasms setup_params",
+    "test": "jest --detectOpenHandles --forceExit",
+    "test:integration": "jest -c jest.config.integration.js --detectOpenHandles --forceExit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dkim-verifier": "^0.0.11",
+    "dotenv": "^17.4.2",
+    "merkle-t": "^0.0.12",
+    "poseidon-h": "^0.0.5",
+    "rts-core": "file:core",
+    "snarkjs": "^0.7.6",
+    "web3": "^4.16.0",
+    "zk-email-light": "^0.0.3"
+  },
   "devDependencies": {
-    "@nomicfoundation/hardhat-ignition": "^3.1.4",
-    "@nomicfoundation/hardhat-toolbox-viem": "^5.0.4",
-    "@types/node": "^22.19.17",
-    "forge-std": "github:foundry-rs/forge-std#v1.9.4",
-    "hardhat": "^3.4.4",
-    "typescript": "~5.8.0",
-    "viem": "^2.48.8"
-  }
+    "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",
+    "@nomicfoundation/hardhat-ethers": "^3.1.3",
+    "@nomicfoundation/hardhat-ignition": "^0.15.13",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.14",
+    "@nomicfoundation/hardhat-network-helpers": "^1.1.0",
+    "@nomicfoundation/hardhat-toolbox": "^6.1.2",
+    "@nomicfoundation/hardhat-verify": "^2.1.0",
+    "@nomicfoundation/ignition-core": "^0.15.13",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
+    "@types/benchmark": "^2.1.5",
+    "@types/chai": "^4.2.0",
+    "@types/imap": "^0.8.42",
+    "@types/jest": "^29.5.14",
+    "@types/mailparser": "^3.4.5",
+    "@types/mocha": ">=9.1.0",
+    "@types/node": "^25.6.0",
+    "@types/snarkjs": "^0.7.9",
+    "benchmark": "^2.1.4",
+    "circom_tester": "^0.0.21",
+    "circomlib": "^2.0.5",
+    "eslint": "^9.26.0",
+    "ethers": "^6.14.0",
+    "hardhat": "^2.28.0",
+    "hardhat-gas-reporter": "^2.3.0",
+    "jest": "^29.7.0",
+    "jiti": "^2.4.2",
+    "prettier": "^3.5.3",
+    "solidity-coverage": "^0.8.1",
+    "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.2",
+    "typechain": "^8.3.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.31.1"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

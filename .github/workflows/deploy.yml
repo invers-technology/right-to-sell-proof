@@ -24,9 +24,19 @@ jobs:
         with:
           node-version: 23
           cache: npm
-          cache-dependency-path: ui/package-lock.json
-      - run: npm ci
-      - run: npm run build
+          cache-dependency-path: |
+            core/package-lock.json
+            ui/package-lock.json
+      - name: Install core dependencies
+        run: npm ci
+        working-directory: core
+      - name: Build core package
+        run: npm run build
+        working-directory: core
+      - name: Install UI dependencies
+        run: npm ci
+      - name: Build UI
+        run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ui/build

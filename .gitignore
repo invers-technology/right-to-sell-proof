@@ -1,31 +1,35 @@
-# Node modules
-/node_modules
+# Node files
+dist
+node_modules
+yarn.lock
 
-# Compilation output
-/dist
-
-# pnpm deploy output
-/bundle
-
-# Hardhat Build Artifacts
-/artifacts
-
-# Hardhat compilation (v2) support directory
-/cache
-
-# Typechain output
-/types
-
-# Environment files
+# IDE files
 .env
-.env.*
-!.env.example
+*.log
+.DS_Store
+.vscode
 
-# Hardhat coverage reports
+# Hardhat files
+/cache
+/artifacts
+build-info
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
 /coverage
+/coverage.json
 
-# Gas snapshot files
-/.gas-snapshot
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337
 
-# Snapshot cheatcodes output
-/snapshots
+# Circom files
+*_js
+*.r1cs
+
+# Setup params
+setup_params
+verification_keys
+wasms

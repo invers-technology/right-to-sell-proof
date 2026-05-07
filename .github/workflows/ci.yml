@@ -1,0 +1,30 @@
+name: Unit Test and CI Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [23.7.0]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup Circom
+        run: |
+          wget https://github.com/iden3/circom/releases/latest/download/circom-linux-amd64 &&
+          sudo mv ./circom-linux-amd64 /usr/bin/circom &&
+          sudo chmod +x /usr/bin/circom
+      - name: Run CI Test
+        run: bash scripts/test.sh

@@ -1,0 +1,116 @@
+Delivered-To: boa.authapp@gmail.com
+Received: by 2002:a98:9687:0:b0:268:19d3:5a87 with SMTP id q7csp2125459eib;
+        Tue, 5 May 2026 00:26:30 -0700 (PDT)
+X-Received: by 2002:a05:6830:34a1:b0:7dc:e336:c828 with SMTP id 46e09a7af769-7e17cebd854mr1080860a34.10.1777965989985;
+        Tue, 05 May 2026 00:26:29 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; t=1777965989; cv=pass;
+        d=google.com; s=arc-20240605;
+        b=lIDcRgRUQhcx6JIMAdbyHzUfp1tcjE21WLDyk0EPjHBrmg1jaCvpY53fM4WRvdcdF1
+         Tqk4V/7fGs3uyOA9HdgnqRF1obE44Y5Gl6b08jYpIAeQM7i1n2w6rdru6Z/n7nu8eUpO
+         yxeO+5zs0r+HTB6J+cK5oeRo03MNe51sdxhny04+mcDeQMMYZT3UlmqQxUSY2bl9vR2R
+         h0jTA3HNZnxiy2YjIhr+8sP+Pqa4LjiOurB9X0A4zqFMiupsMrt/lZxmnO8e/5HZCs3y
+         xRWuu6ecsRbMbhTZsEYfbXzhQ8CbjX2R3/lL41DaB9axaJynfI2zImMw1u85dxeGQTfQ
+         rofg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=5I6YBnvLASD6JXIWTkFNz6LifeJy6C8U7CQXD/iC7DU=;
+        fh=WNF2hYM2FvpRzao5DNxVOfhNIhgsRCiwRlxube30dL0=;
+        b=DKysMAZcXOMF9he6x3fPr8Dr/vG+al5lZD6Aq1EtGAVWMrveTsVfPgFCgWXMh47Kbd
+         q8F9C75ciy5vy+Skic5Qy9QaZ/NPdHrXpzC26hW/JnK6X6DsTAxF6iZckpSLoXAkKK2g
+         md2kgQwPaI/e3H6lxKIfbwUWPlYtclkga2HjweTRP1rFtU9GbotcY6O2oVCtdaHNSfmF
+         PCmf0BJD3huWQasYkpIb6kvdRr9NBqh0zB9Hg+yHRpqHu5njPKpOmHma9dA1H5fmtxmw
+         WB46q4epX8Oh7R+Uvzwt7A9L9WMtS23PYcRjsXxC4MFlP7izg6XzxwK3/7+UFFnsGtzj
+         dolQ==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20251104 header.b=UeZHvbXQ;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of phantomofrotten@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=phantomofrotten@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <phantomofrotten@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 46e09a7af769-7e1cbbf89f8sor177493a34.13.2026.05.05.00.26.29
+        for <boa.authapp@gmail.com>
+        (Google Transport Security);
+        Tue, 05 May 2026 00:26:29 -0700 (PDT)
+Received-SPF: pass (google.com: domain of phantomofrotten@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20251104 header.b=UeZHvbXQ;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of phantomofrotten@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=phantomofrotten@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1777965989; cv=none;
+        d=google.com; s=arc-20240605;
+        b=csybDZPqpo7hnBaDGJ91yHFVOWUev9j23yJ+t5NaJav/+0AdhauDmYTOMc4wpoVngk
+         uUU5dMu788SJCkDe6sOy8smI9Ey2EhDvPnoHPOS7E3rU8HpGCYQyDqXw2eTwpCRZ3tuh
+         fL6aUTCRMdx9z+YalfPW2dhPmJ/0jickJMFu7jfuXwavEdzhi5CxcMmxaWAdKlxaZUg4
+         TTx/9LCi+aMJlL3bUhrQv0MPlI32EtjSrycvOi8KUs/jPYofnLOCIkulepC2J7Vzn7aL
+         IqmEsl0CmHEnMs2rC5bpDOKDuV7igZSQP8tLivo9M1O/2fAgxsygPUTvn6YrRQIQpp3W
+         1RrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=5I6YBnvLASD6JXIWTkFNz6LifeJy6C8U7CQXD/iC7DU=;
+        fh=WNF2hYM2FvpRzao5DNxVOfhNIhgsRCiwRlxube30dL0=;
+        b=bqXVLczCnHnIJ71jQgOb7oCHnuU1XIhPB976cacQr4c2ZmwxG5Mjq8HpMP9FcNktU3
+         QjsJ/9HKvFAxUXWvP9PiPovIwY0igwCIuNru/dNuOm4xSFV/Lsig3LRpXo2KN+ds2MmW
+         /N/U5tyHTxIKr5mPRfdelwL5OBM/wVT8yvqOQJ7lw3Pe6aBVVmmZ+pql10s4bVoejQs8
+         eEzWaHumcpl5C1Dxi8C6Mi2Gz+a7O8vFVCxnAyuTgosPjWZ+oYm37RrE06UpXlW1OJBx
+         Vxs4ypJH7g3bQ7IMx2blSjMgxaPU+a1xhe+Krl1VUIzhN4liMW1IfbVV/mPS1oFOdQR/
+         iyrw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777965989; x=1778570789; dara=google.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5I6YBnvLASD6JXIWTkFNz6LifeJy6C8U7CQXD/iC7DU=;
+        b=UeZHvbXQ4wgiCIeipmtL6xabhzasizpVXImdbGSHpGnMVLBMuTC+WzZsjPSA4xyD0b
+         yeCRdVmwC4XyFrTgMEk5bRT9a6iN0RcafiR44opqGgSZW/k3CR9OBVfEe0buEPWj8sRL
+         pOQFAVG1P3gVXmMaUlJrC/UXPItOTGRqCgd+l7VH/TG6nynmQ4WjmCHLfugl1XL3q3Zn
+         R0PO+ZkZpNW8zFsUmBL1ZpjriJ8DLIAUZnrbpJ0gs+D5A13y0wWXAZVzmlnUlsG2SUyi
+         NyV0TYW9JlX/rPADLgblAgMlc4nX0Ih1haaEEYkmJu/I1LuROSf2aMG1m2BBtjz1g+56
+         vZTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777965989; x=1778570789;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5I6YBnvLASD6JXIWTkFNz6LifeJy6C8U7CQXD/iC7DU=;
+        b=ax4zb0rxbB3BFCBtLeLcnl9FXs5gXWXrc5/10/AnHPYznioZiqxIe4QRUwuUoC9jaf
+         0jKtAepPvF0D6M9e84LckXg+e/G+VgGDoINt8zcCg3XqmWH0xJ9Bv6ubc7hvwvVLVzMb
+         3abPs1zC6CCahr/JVonLNL7kcTLWTF9FeFFs3M2NEfkJQlcXW2VT/iGS3dDGpynrfAMh
+         Vrp+xyLA1ohQ5LFMaoCl+Pwm0bsTwUfDw9sGXUtRhpZk64qNBH90pcA+IZO2WMZ0rfjV
+         22hpvEDyhzZIHG6954NcvDkuPh4+ncYmAGY2tyb+CDxCJN17W5l9riM9UF0aTUp3HXOW
+         y/Cg==
+X-Gm-Message-State: AOJu0YzfT9xlxeffS8PSVpzivuTY7WBb6mvfj9j0ndaHiSDTwWgbDBtG
+	RRnJBJgG+NG/ssTh/gr45M5AcmT806+uhjD0sec3xOWYjexJgrKuQBa3DBuT3HSxOLZ1iUjB1bc
+	/JIxuaWOGPinYUVuwOeUbdMSzUlfclE3W7Q==
+X-Gm-Gg: AeBDievQ/o8FStle55qETUrepNbid2YoPKL4VeobD6NE8hQCH1lwrDnKQzaSK/8hyaw
+	D1y4zNP0YeRGdfAAznfnr5k6qv2MeIKLyAq20i+/al/M+4nF7DaEj0Q1jTtbZsr1ZHlbCGRO5y5
+	zazU6WafhgcZBdlx66zsSoCzXslFEIqdVuOlzlMPSYyteWtsGQR/ShbqhoyYKH7N6KdCiNQsfFg
+	ddb79EsK4aLyBaEcPC840HeRE4+IiPsoGX3h1hWTAMZvv3VhzKN9smrNcxniTTncHnKjBJLtkSv
+	tH/T2BVB98595OWqMiw=
+X-Received: by 2002:a05:6820:1f12:b0:696:1fae:fb83 with SMTP id
+ 006d021491bc7-6998d248317mr853505eaf.34.1777965989363; Tue, 05 May 2026
+ 00:26:29 -0700 (PDT)
+MIME-Version: 1.0
+From: WhiteHat ash <phantomofrotten@gmail.com>
+Date: Tue, 5 May 2026 16:26:17 +0900
+X-Gm-Features: AVHnY4KuXv12viJ1HkzVUiiH0vxZAagYa8SvrMC7MrIxnGzFtQMZ6y2gGMcUBOc
+Message-ID: <CADKxwWm2b2TrkhqO=ua-mvCxW1jjn09sLGPVWQ9inyDLeAh=mQ@mail.gmail.com>
+Subject: 1d069ff5a59ecc80cdc485e2008aaed156cf2736f2b0cb48005cbb485ca56f5c
+To: boa.authapp@gmail.com
+Content-Type: multipart/alternative; boundary="0000000000003802f406510cf79c"
+
+--0000000000003802f406510cf79c
+Content-Type: text/plain; charset="UTF-8"
+
+
+
+--0000000000003802f406510cf79c
+Content-Type: text/html; charset="UTF-8"
+
+<div dir="ltr"></div>
+
+--0000000000003802f406510cf79c--

@@ -1,0 +1,93 @@
+Delivered-To: boa.authapp@gmail.com
+Received: by 2002:a05:7022:ec17:b0:9b:84ae:c11d with SMTP id qj23csp1131520dlb;
+        Sun, 20 Apr 2025 02:28:29 -0700 (PDT)
+X-Received: by 2002:a05:6512:4028:b0:549:8db6:9366 with SMTP id 2adb3069b0e04-54d6e6355fcmr2248277e87.28.1745141309491;
+        Sun, 20 Apr 2025 02:28:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1745141309; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dXZH7eRkHbJ4wX+i48BGVHz3FDSURh1tyzz+1ows6fy1vHw5ptX3s0wdr/9rA8JXND
+         hy8hSVDxQp//cpZNsdUUehK5XffmxSQlqzFgb78j1VHCLEvrBPsiIKsMdjbIzTufjwnl
+         fKMegioeEH3N6hu5GSuU2uT8KJz8hwK+hlfmGrhOM/9xTjUAZBP0cYT8EeD3Im7G5zVS
+         baF6sQ5wgX5SzWK7X2qIEgi2/wDDs4VkuTLqIWANR1DvNhkGZffk3kxvAya0/bHx20oY
+         ryPWAakJuZvmELDXJN1hVitKXxpZzIV8KfRcvMUmRC8cKBlGhrEQvsF2m40DOnhB7REN
+         8OGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=W8RbmmBX1PUkuHOJ+Z1x3ig4Mx+4pLMFqvZEqXaSSFU=;
+        fh=WNF2hYM2FvpRzao5DNxVOfhNIhgsRCiwRlxube30dL0=;
+        b=QvzXdiUUy8fVixC+nDAlf07a7afD9diNf6yx557/L10J8Y/KfkHu8+VnicKWUSv3Cw
+         Lmr/AGKWc+ybdhSD9W1dTPTl5qBQq+eDmi1O6YnWLXExiiQnDconi/PIsJLfEvMeAd7K
+         Mvh5O+jzsiM6qxCSqhHmYyeAgczfwZw1zLr0Ud3Iabl15idfLJkPhDSTpm2Y70KlWISo
+         iTma+o5rHRfpKVE+7h4MTtJzxdwxCM3WsCazvqOhAofPfxTm8lEFs2Q7p9HneO+3I89/
+         ypf/CTYy5VbY48OCqjQHXXILq79mAVuLE/7QvKFy55tIVEuj4FJt6Iz47V8Bgbk2u/uZ
+         +DiA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=hSbcyqyn;
+       spf=pass (google.com: domain of phantomofrotten@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=phantomofrotten@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <phantomofrotten@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 2adb3069b0e04-54d6dfa99cbsor700162e87.21.2025.04.20.02.28.29
+        for <boa.authapp@gmail.com>
+        (Google Transport Security);
+        Sun, 20 Apr 2025 02:28:29 -0700 (PDT)
+Received-SPF: pass (google.com: domain of phantomofrotten@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20230601 header.b=hSbcyqyn;
+       spf=pass (google.com: domain of phantomofrotten@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=phantomofrotten@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745141308; x=1745746108; dara=google.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=W8RbmmBX1PUkuHOJ+Z1x3ig4Mx+4pLMFqvZEqXaSSFU=;
+        b=hSbcyqynXx9ze9trGNRiZnpQx8KmFAc8TX83/6eySehFf4dBPu27bHOnueEwDAGgV4
+         /myep8C/18T7a5XDtXorffTdEy3k9p1AG2fHzIz5qvRQSG6T95Lb+nR2ooYIqs2EGfTw
+         +tyqCbSoEk/oGlNTy7Z7+MJ6pV0j1W1eaxm/Oag/F6gKe29yG6A3Fft0sESA7ZVt9j7j
+         AMaF+nVoeqvKGlZKdvF375jG1mZ8/owjnDWEoxSlUF2XVYX14dm/pux7uwdKqc6ZJGcI
+         qe47LrOMp6PEN+lvbCiRYyNLdrwpnCroQmzraS3qwoVgvK1B7pSecvLPUf+Aozlm3aLw
+         lROQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745141308; x=1745746108;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W8RbmmBX1PUkuHOJ+Z1x3ig4Mx+4pLMFqvZEqXaSSFU=;
+        b=ATwVgGEA+yUilgtCeoJ/DcFdaFzp82WfG46kXhp9+PtTMAA94JHpZOiPsbtvFZTdtE
+         w7h5Wq1583B+ksLVSg4TvR2ye8VmoVXaU6j19h1+AlbfFwXdF7XRyRJFjjNBm9f0s0cr
+         uDKijmSzE8/ZJMd7ecaCaxX+/2pwM2s1qx5Oi7npvJ33P3z2PK2mSALlu/vO4Z8E97Em
+         TUmH6gXMbxOupbEqQPTbbhTA4JjY4Cz1CG2eTpZ4jLAXW2LIlqCpR/HueDUENYZrHA33
+         38QECbb191lzYBNRAAWqPkWkJxdp1KmrmLE5x71c1Ij3ISLyqEXLPiq+qiG0k5PJOtT1
+         1FHg==
+X-Gm-Message-State: AOJu0YzsS/rY985ihQd7ZujACL3p83X3u0t5WWfL08cWdyQYxWXnh1mJ
+        q+QzT6KO+RjPq+jEeqSMOFkx+GqBoSzXpmTlk+KJEq48BYtxM4JZEvPgnXW9Qi2vpw4w51OfJFH
+        Tlpm7EHk9gy108itZWpeeSmwmuEjz0A==
+X-Gm-Gg: ASbGnctVHKzvXRSAWekvaiuAhm6+GGRcCfBwKS+unIV+Qzyd7qZuP4QLZQPkjsVRPup
+        eCazao1l1Xj2f2w9BATvuRVXrzfuzLgUcPixnvPn6g5xkXoPhSv+BT0MWGUVShS3Y4HARgI45mh
+        SetwQ171B6reSmrcAMH0Df/sA=
+X-Google-Smtp-Source: AGHT+IGB6Kf/86qnb8n8mcFzpuVHZCInx+IPQawEwdvdRtFvAXF/4DAMtphMRq2nO+YjJxjHssMrl3PeebesuTLLDXg=
+X-Received: by 2002:ac2:4e08:0:b0:549:5b54:2c77 with SMTP id
+ 2adb3069b0e04-54d6e639727mr2418128e87.32.1745141307792; Sun, 20 Apr 2025
+ 02:28:27 -0700 (PDT)
+MIME-Version: 1.0
+From: WhiteHat ash <phantomofrotten@gmail.com>
+Date: Sun, 20 Apr 2025 18:28:15 +0900
+X-Gm-Features: ATxdqUEKmyyUutA0CgBki6LjV9nszf_znfa-_6NC4PB15vL-0cSK5W8YKl7Ly7E
+Message-ID: <CADKxwWnzeSzBppKPSyduETMiqtKmCx=t0k7HBnks74uupJb26A@mail.gmail.com>
+Subject: 11cc2c7efd180a75ab2f7a0f90af758c1acc7a4235783d7e2823720fb1dd4f58
+To: boa.authapp@gmail.com
+Content-Type: multipart/alternative; boundary="000000000000bbe4390633325f74"
+
+--000000000000bbe4390633325f74
+Content-Type: text/plain; charset="UTF-8"
+
+
+
+--000000000000bbe4390633325f74
+Content-Type: text/html; charset="UTF-8"
+
+<div dir="ltr"><br></div>
+
+--000000000000bbe4390633325f74--

@@ -1,0 +1,29 @@
+{
+  "name": "rts-core",
+  "version": "1.0.0",
+  "description": "Right to Sell Proof Types and Utils",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json && cp src/Rts.json dist/Rts.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "snarkjs": "^0.7.6"
+  },
+  "devDependencies": {
+    "@types/snarkjs": "^0.7.9",
+    "typescript": "^6.0.3"
+  }
+}
