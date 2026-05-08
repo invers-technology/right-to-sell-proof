@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Right to Sell Demo</title>
+    <script>
+      // GitHub Pages SPA: store the requested path in sessionStorage,
+      // then redirect to the app root so index.html can silently restore it.
+      // This avoids exposing a confusing encoded URL in the address bar.
+      sessionStorage.setItem(
+        "spa_redirect",
+        window.location.pathname +
+          window.location.search +
+          window.location.hash,
+      );
+      window.location.replace("/right-to-sell-proof/");
+    </script>
+  </head>
+  <body></body>
+</html>

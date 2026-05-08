@@ -1,7 +1,7 @@
 import React from "react";
 import type { CSSProperties, MouseEvent } from "react";
 import { useEffect, useState } from "react";
-import { isAllowedShopItemRoute } from "./constants";
+import { BASE, isAllowedShopItemRoute } from "./constants";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ShopItemPage from "./pages/ShopItemPage";
@@ -13,7 +13,7 @@ export interface RouteItem {
   description: string;
 }
 
-export type AppPath = "/" | "/ec" | "/verify";
+export type AppPath = "/" | "/verify";
 
 interface StaticRouteState {
   kind: "static";
@@ -36,11 +36,6 @@ type RouteState = StaticRouteState | ShopItemRouteState | NotFoundRouteState;
 
 const routes: RouteItem[] = [
   {
-    path: "/ec",
-    title: "EC",
-    description: "Browse proof-linked shop and item pairs.",
-  },
-  {
     path: "/verify",
     title: "Verify",
     description: "Entry point for verification.",
@@ -51,7 +46,10 @@ const isAppPath = (path: string): path is AppPath =>
   path === "/" || routes.some((route) => route.path === path);
 
 const normalizeRoute = (pathname: string, search: string): RouteState => {
-  const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+  const stripped = pathname.startsWith(BASE)
+    ? pathname.slice(BASE.length)
+    : pathname;
+  const normalizedPath = stripped.replace(/\/+$/, "") || "/";
   if (normalizedPath === "/404") {
     return { kind: "notFound" };
   }
@@ -100,9 +98,9 @@ function App() {
   useEffect(() => {
     if (
       currentRoute.kind === "notFound" &&
-      window.location.pathname !== "/404"
+      window.location.pathname !== BASE + "/404"
     ) {
-      window.history.replaceState(null, "", "/404");
+      window.history.replaceState(null, "", BASE + "/404");
     }
   }, [currentRoute]);
 
@@ -111,7 +109,7 @@ function App() {
       return;
     }
 
-    window.history.pushState(null, "", nextPath);
+    window.history.pushState(null, "", BASE + nextPath);
     setCurrentRoute({ kind: "static", path: nextPath });
   };
 
@@ -135,14 +133,18 @@ function App() {
   return (
     <div style={styles.shell}>
       <header style={styles.header}>
-        <a href="/" onClick={handleNavigate("/")} style={styles.brandLink}>
+        <a
+          href={BASE + "/"}
+          onClick={handleNavigate("/")}
+          style={styles.brandLink}
+        >
           Right to Sell Demo
         </a>
         <nav aria-label="Main navigation" style={styles.nav}>
           {routes.map((routeItem) => (
             <a
               key={routeItem.path}
-              href={routeItem.path}
+              href={BASE + routeItem.path}
               onClick={handleNavigate(routeItem.path)}
               style={{
                 ...styles.navLink,

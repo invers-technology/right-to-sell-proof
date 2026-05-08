@@ -1,10 +1,11 @@
 import React from "react";
 import type { CSSProperties } from "react";
 import {
+  BASE,
   categoryLabels,
   getShopItemName,
   shopListings,
-} from "../constants/shop";
+} from "../constants";
 
 interface ShopItemPageProps {
   shopId: string;
@@ -131,7 +132,7 @@ function ShopItemPage({ shopId, itemId, locale, category }: ShopItemPageProps) {
     (route) => route.shopId === shopId && route.itemId === itemId,
   );
   const proof = route?.proof || "";
-  const verifyHref = `/verify?proof=${encodeURIComponent(proof)}`;
+  const verifyHref = `${BASE}/verify?proof=${encodeURIComponent(proof)}`;
 
   return (
     <main style={styles.page}>

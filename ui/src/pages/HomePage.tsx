@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import type { Root } from "rts-core";
 import RootDetails from "../components/RootDetails";
-import { getShopItemName, shopListings } from "../constants/shop";
+import { BASE, getShopItemName, shopListings } from "../constants";
 import { Verifier } from "../verifier";
 
 type LatestRootState =
@@ -46,7 +46,7 @@ function HomePage() {
             <p style={styles.kicker}>Listings</p>
             <div style={styles.list}>
               {shopListings.map((route) => {
-                const href = `/shop/${route.shopId}/item/${route.itemId}?localte=${route.locale}&category=${route.category}`;
+                const href = `${BASE}/shop/${route.shopId}/item/${route.itemId}?localte=${route.locale}&category=${route.category}`;
 
                 return (
                   <a key={href} href={href} style={styles.itemLink}>
@@ -58,7 +58,7 @@ function HomePage() {
           </section>
           <section style={styles.panel}>
             <p style={styles.kicker}>Verify</p>
-            <a href="/verify" style={styles.verifyLink}>
+            <a href={BASE + "/verify"} style={styles.verifyLink}>
               Verify Proof
             </a>
             <div style={styles.latestRootBlock}>

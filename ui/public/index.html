@@ -2,6 +2,16 @@
 <html lang="en">
   <head>
     <script>
+      // GitHub Pages SPA: restore path stored by 404.html in sessionStorage.
+      (function () {
+        var redirect = sessionStorage.getItem("spa_redirect");
+        if (redirect) {
+          sessionStorage.removeItem("spa_redirect");
+          window.history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+    <script>
       window.define = function (factory) {
         factory();
       };
