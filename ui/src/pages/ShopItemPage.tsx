@@ -10,11 +10,11 @@ import {
 interface ShopItemPageProps {
   shopId: string;
   itemId: string;
-  locale: string | null;
-  category: string | null;
+  locale: string;
+  category: string;
 }
 
-const getProductTitle = (locale: string | null, category: string | null) => {
+const getProductTitle = (locale: string, category: string) => {
   if (!locale || !category) {
     return "Unknown Product";
   }
@@ -22,22 +22,17 @@ const getProductTitle = (locale: string | null, category: string | null) => {
   return getShopItemName(locale, category);
 };
 
-const getProductDescription = (
-  locale: string | null,
-  category: string | null,
-) => {
+const getProductDescription = (locale: string, category: string) => {
   const title = getProductTitle(locale, category);
-  return `${title} is a sample listing prepared for the right-to-sell verification flow. The item is connected to a registered shop and item pair, and the attached proof can be used to confirm that the seller is authorized to present this product listing. This page keeps the product information intentionally simple while preserving the verification path for the proof.`;
+  return `${title} is a sample listing for the right-to-sell verification flow. It is connected to a registered shop and item pair, and the attached proof confirms that the seller is authorized to present this listing. The details stay simple so the verification path is clear.`;
 };
 
-const ProductImage = ({ category }: { category: string | null }) => {
-  const categoryLabel = category
-    ? categoryLabels[category] || "Product"
-    : "Product";
+const ProductImage = ({ category }: { category: string }) => {
+  const categoryLabel = categoryLabels[category] || category;
 
   return (
     <div style={styles.imageFrame} aria-label={`${categoryLabel} image`}>
-      <svg viewBox="0 0 180 140" role="img" style={styles.productSvg}>
+      <svg viewBox="0 12 180 116" role="img" style={styles.productSvg}>
         <rect x="18" y="18" width="144" height="104" rx="10" fill="#f7f8fb" />
         <rect
           x="18"
@@ -147,14 +142,10 @@ function ShopItemPage({ shopId, itemId, locale, category }: ShopItemPageProps) {
         <section style={styles.descriptionBlock}>
           <h2 style={styles.descriptionTitle}>Description</h2>
           <p style={styles.description}>{description}</p>
-          {proof && (
-            <p style={styles.description}>The right to sell proof is below.</p>
-          )}
-          {proof && (
-            <a href={verifyHref} style={styles.proofLink}>
-              {proof}
-            </a>
-          )}
+          <p style={styles.description}>The right to sell proof is below.</p>
+          <a href={verifyHref} style={styles.proofLink}>
+            {proof}
+          </a>
         </section>
 
         <dl style={styles.details}>
@@ -168,11 +159,11 @@ function ShopItemPage({ shopId, itemId, locale, category }: ShopItemPageProps) {
           </div>
           <div style={styles.detailRow}>
             <dt style={styles.label}>Locale</dt>
-            <dd style={styles.value}>{locale || "-"}</dd>
+            <dd style={styles.value}>{locale}</dd>
           </div>
           <div style={styles.detailRow}>
             <dt style={styles.label}>Category</dt>
-            <dd style={styles.value}>{category || "-"}</dd>
+            <dd style={styles.value}>{category}</dd>
           </div>
         </dl>
       </section>
@@ -241,12 +232,11 @@ const styles: Record<string, CSSProperties> = {
     borderRadius: "8px",
     display: "flex",
     justifyContent: "center",
-    minHeight: "220px",
-    padding: "18px",
+    padding: "10px 18px",
   },
   productSvg: {
     display: "block",
-    height: "220px",
+    height: "auto",
     maxWidth: "100%",
     width: "280px",
   },
@@ -268,18 +258,7 @@ const styles: Record<string, CSSProperties> = {
     margin: 0,
   },
   proofLink: {
-    background: "#f7f8fb",
-    border: "1px solid #dde2eb",
-    borderRadius: "6px",
-    color: "#173a6a",
-    display: "block",
-    fontFamily:
-      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace',
-    fontSize: "13px",
-    lineHeight: 1.5,
     overflowWrap: "anywhere",
-    padding: "12px",
-    textDecoration: "none",
   },
 };
 

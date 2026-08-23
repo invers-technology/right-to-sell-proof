@@ -71,7 +71,7 @@ describe("consumer getVerificationKey", () => {
       const { publicKey, proof, root } = await Verifier.decodeProof(encoded);
 
       const publicInputs = Verifier.encodePublicInputs(
-        BigInt(root),
+        BigInt(root.root),
         resellerLid,
         publicKey,
       );

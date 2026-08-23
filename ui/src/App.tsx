@@ -24,8 +24,8 @@ interface ShopItemRouteState {
   kind: "shopItem";
   shopId: string;
   itemId: string;
-  locale: string | null;
-  category: string | null;
+  locale: string;
+  category: string;
 }
 
 interface NotFoundRouteState {
@@ -71,8 +71,8 @@ const normalizeRoute = (pathname: string, search: string): RouteState => {
       kind: "shopItem",
       shopId,
       itemId,
-      locale: params.get("localte"),
-      category: params.get("category"),
+      locale: params.get("localte") || "",
+      category: params.get("category") || "",
     };
   }
 
@@ -140,24 +140,6 @@ function App() {
         >
           Right to Sell Demo
         </a>
-        <nav aria-label="Main navigation" style={styles.nav}>
-          {routes.map((routeItem) => (
-            <a
-              key={routeItem.path}
-              href={BASE + routeItem.path}
-              onClick={handleNavigate(routeItem.path)}
-              style={{
-                ...styles.navLink,
-                ...(currentRoute.kind === "static" &&
-                currentRoute.path === routeItem.path
-                  ? styles.activeNavLink
-                  : {}),
-              }}
-            >
-              {routeItem.title}
-            </a>
-          ))}
-        </nav>
       </header>
 
       {currentRoute.kind === "static" && currentRoute.path === "/" && (
@@ -200,23 +182,6 @@ const styles: Record<string, CSSProperties> = {
     fontSize: "16px",
     fontWeight: 700,
     textDecoration: "none",
-  },
-  nav: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "8px",
-  },
-  navLink: {
-    borderRadius: "6px",
-    color: "#42526b",
-    fontSize: "14px",
-    fontWeight: 600,
-    padding: "8px 10px",
-    textDecoration: "none",
-  },
-  activeNavLink: {
-    background: "#e9eef8",
-    color: "#173a6a",
   },
 };
 

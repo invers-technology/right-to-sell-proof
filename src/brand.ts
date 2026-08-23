@@ -23,7 +23,7 @@ export const identifiers = [
 ];
 export const initialRoot =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
-export const initialDuration = 259200;
+export const initialDuration = 25920000;
 export const initialPublicKeys = [
   [
     2107195391459410975264579855291297887n,

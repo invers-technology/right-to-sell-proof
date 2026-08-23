@@ -37,6 +37,7 @@ function HomePage() {
       isMounted = false;
     };
   }, []);
+
   return (
     <main style={styles.page}>
       <section style={styles.hero}>

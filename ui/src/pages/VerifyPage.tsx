@@ -1,92 +1,133 @@
 import React, { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
-import type { Root } from "rts-core";
+import type { Root, VerificationKey } from "rts-core";
 import RootDetails from "../components/RootDetails";
 import { Verifier } from "../verifier";
 
-type VerificationResult =
-  | { status: "idle" }
-  | { status: "success"; latestRoot: Root }
-  | { status: "decode-error" }
-  | { status: "network-error" }
-  | { status: "verify-error" };
+enum VerificationStatus {
+  Idle = "idle",
+  Success = "success",
+  DecodeError = "decode-error",
+  RootNotFound = "root-not-found",
+  NetworkError = "network-error",
+  VerifyError = "verify-error",
+}
+
+const normalizeEncodedProof = (value: string) => {
+  if (!value.includes("%")) {
+    return value;
+  }
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value
+      .replace(/%2F/gi, "/")
+      .replace(/%2B/gi, "+")
+      .replace(/%3D/gi, "=");
+  }
+};
 
 function VerifyPage() {
-  const [result, setResult] = useState<VerificationResult>({
-    status: "idle",
-  });
+  const [status, setStatus] = useState<VerificationStatus>(
+    VerificationStatus.Idle,
+  );
+  const [validRoot, setValidRoot] = useState<Root | null>(null);
+  const [verifyDurationMs, setVerifyDurationMs] = useState<number | null>(null);
+  const [verificationKey, setVerificationKey] =
+    useState<VerificationKey | null>(null);
+  const [validRoots, setValidRoots] = useState<Root[] | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
   const [encodedProof, setEncodedProof] = useState("");
   const [url, setUrl] = useState("");
 
+  useEffect(() => {
+    const proofFromParams =
+      new URLSearchParams(window.location.search).get("proof") || "";
+    setEncodedProof(normalizeEncodedProof(proofFromParams));
+
+    (async () => {
+      try {
+        const [fetchedVerificationKey, fetchedValidRoots] = await Promise.all([
+          Verifier.getVerificationKey(),
+          Verifier.getValidRoots(),
+        ]);
+        setVerificationKey(fetchedVerificationKey);
+        setValidRoots(fetchedValidRoots);
+      } catch {
+        setVerificationKey(null);
+        setValidRoots(null);
+      }
+    })();
+  }, []);
+
   const verify = async () => {
     setIsVerifying(true);
-    setResult({ status: "idle" });
+    setStatus(VerificationStatus.Idle);
+    setVerifyDurationMs(null);
 
-    let decodedProof: Awaited<ReturnType<typeof Verifier.decodeProofLocally>>;
-    try {
-      decodedProof = await Verifier.decodeProofLocally(encodedProof);
-    } catch {
-      setResult({ status: "decode-error" });
+    if (!verificationKey || !validRoots) {
+      setStatus(VerificationStatus.NetworkError);
       setIsVerifying(false);
       return;
     }
 
-    let latestRoot: Root | undefined;
-    let root: string;
-    let publicKey: bigint[];
-    let verifier: Verifier;
+    let decodedProof: Awaited<ReturnType<typeof Verifier.decodeProofIndexes>>;
     try {
-      const [verificationKey, fetchedPublicKey, validRoots] = await Promise.all(
-        [
-          Verifier.getVerificationKey(),
-          Verifier.getPublicKey(decodedProof.keyIndex),
-          Verifier.getValidRoots(),
-        ],
-      );
-      latestRoot = Verifier.getLatestRootFromRoots(validRoots);
-      if (!latestRoot) {
-        throw new Error("Latest root not found");
-      }
+      decodedProof = await Verifier.decodeProofIndexes(encodedProof);
+    } catch {
+      setStatus(VerificationStatus.DecodeError);
+      setIsVerifying(false);
+      return;
+    }
+
+    let root: Root;
+    try {
       root = Verifier.getRootFromVersionInRoots(
         decodedProof.rootVersion,
         validRoots,
       );
-      publicKey = fetchedPublicKey;
+    } catch {
+      setStatus(VerificationStatus.RootNotFound);
+      setIsVerifying(false);
+      return;
+    }
+
+    let publicKey: bigint[];
+    let verifier: Verifier;
+    try {
+      publicKey = await Verifier.getPublicKey(decodedProof.keyIndex);
       verifier = new Verifier(verificationKey);
     } catch {
-      setResult({ status: "network-error" });
+      setStatus(VerificationStatus.NetworkError);
       setIsVerifying(false);
       return;
     }
 
     try {
       const publicSignals = Verifier.encodePublicInputs(
-        BigInt(root),
+        BigInt(root.root),
         url,
         publicKey,
       );
+      const verifyStart = performance.now();
       const isVerified = await verifier.verify(
         decodedProof.proof,
         publicSignals,
       );
-      setResult(
-        isVerified
-          ? { status: "success", latestRoot }
-          : { status: "verify-error" },
-      );
+      const verifyDuration = performance.now() - verifyStart;
+      if (isVerified) {
+        setValidRoot(root);
+        setVerifyDurationMs(verifyDuration);
+        setStatus(VerificationStatus.Success);
+      } else {
+        setStatus(VerificationStatus.VerifyError);
+      }
     } catch {
-      setResult({ status: "verify-error" });
+      setStatus(VerificationStatus.VerifyError);
     } finally {
       setIsVerifying(false);
     }
   };
-
-  useEffect(() => {
-    const proofFromParams =
-      new URLSearchParams(window.location.search).get("proof") || "";
-    setEncodedProof(proofFromParams);
-  }, []);
 
   return (
     <main style={styles.page}>
@@ -97,7 +138,9 @@ function VerifyPage() {
             <span style={styles.label}>Proof</span>
             <textarea
               value={encodedProof}
-              onChange={(event) => setEncodedProof(event.target.value)}
+              onChange={(event) =>
+                setEncodedProof(normalizeEncodedProof(event.target.value))
+              }
               placeholder="Paste proof"
               style={styles.textarea}
             />
@@ -131,17 +174,22 @@ function VerifyPage() {
               </p>
             </section>
           )}
-          {!isVerifying && result.status === "success" && (
-            <section style={styles.successResult}>
-              <p style={styles.resultTitle}>Verification succeeded</p>
-              <p style={styles.resultMessage}>verifier.verify returned true.</p>
-              <div style={styles.rootResult}>
-                <p style={styles.rootResultLabel}>Latest Root</p>
-                <RootDetails root={result.latestRoot} />
-              </div>
-            </section>
-          )}
-          {!isVerifying && result.status === "decode-error" && (
+          {!isVerifying &&
+            status === VerificationStatus.Success &&
+            validRoot && (
+              <section style={styles.successResult}>
+                <p style={styles.resultTitle}>Verification succeeded</p>
+                <p style={styles.resultMessage}>
+                  The proof verification returned true.
+                  {verifyDurationMs !== null &&
+                    ` (took ${verifyDurationMs.toFixed(2)} ms)`}
+                </p>
+                <div style={styles.rootResult}>
+                  <RootDetails root={validRoot} />
+                </div>
+              </section>
+            )}
+          {!isVerifying && status === VerificationStatus.DecodeError && (
             <section style={styles.failureResult}>
               <p style={styles.resultTitle}>Proof decode failed</p>
               <p style={styles.resultMessage}>
@@ -149,7 +197,15 @@ function VerifyPage() {
               </p>
             </section>
           )}
-          {!isVerifying && result.status === "network-error" && (
+          {!isVerifying && status === VerificationStatus.RootNotFound && (
+            <section style={styles.failureResult}>
+              <p style={styles.resultTitle}>Invalid proof</p>
+              <p style={styles.resultMessage}>
+                The proof is invalid or has been revoked.
+              </p>
+            </section>
+          )}
+          {!isVerifying && status === VerificationStatus.NetworkError && (
             <section style={styles.failureResult}>
               <p style={styles.resultTitle}>Network access failed</p>
               <p style={styles.resultMessage}>
@@ -157,11 +213,11 @@ function VerifyPage() {
               </p>
             </section>
           )}
-          {!isVerifying && result.status === "verify-error" && (
+          {!isVerifying && status === VerificationStatus.VerifyError && (
             <section style={styles.failureResult}>
               <p style={styles.resultTitle}>Verification failed</p>
               <p style={styles.resultMessage}>
-                verifier.verify returned false.
+                The proof verification returned false.
               </p>
             </section>
           )}
@@ -175,7 +231,7 @@ const styles: Record<string, CSSProperties> = {
   page: {
     margin: "0 auto",
     maxWidth: "960px",
-    padding: "32px 24px",
+    padding: "32px 24px 100vh",
   },
   panel: {
     background: "#ffffff",
@@ -214,7 +270,7 @@ const styles: Record<string, CSSProperties> = {
       'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace',
     fontSize: "13px",
     lineHeight: 1.5,
-    minHeight: "180px",
+    minHeight: "135px",
     padding: "12px",
     resize: "vertical",
   },

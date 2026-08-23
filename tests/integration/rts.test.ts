@@ -133,6 +133,7 @@ describe("Integration", () => {
       emailRaw,
       productLeaf,
       merkleTree,
+      true,
     );
     const { proof } = await prover.prove(rtsCircuitInputs);
     const verifictionKey = await Verifier.getVerificationKey();

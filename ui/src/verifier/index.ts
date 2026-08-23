@@ -82,8 +82,8 @@ export class Verifier {
   }
 
   static getRootFromVersionInRoots(targetVersion: bigint, roots: Root[]) {
-    for (const { root, version } of roots) {
-      if (targetVersion === BigInt(version.toString())) {
+    for (const root of roots) {
+      if (targetVersion === BigInt(root.version.toString())) {
         return root;
       }
     }
@@ -101,7 +101,7 @@ export class Verifier {
     );
   }
 
-  static async decodeProofLocally(base64Proof: string) {
+  static async decodeProofIndexes(base64Proof: string) {
     const normalizedProof = base64Proof.trim();
     if (normalizedProof.length !== PROOF_MAX_LENGTH) {
       throw new Error(
@@ -133,7 +133,7 @@ export class Verifier {
 
   static async decodeProof(base64Proof: string) {
     const { proof, keyIndex, rootVersion } =
-      await this.decodeProofLocally(base64Proof);
+      await this.decodeProofIndexes(base64Proof);
     const publicKey = (await contract.methods
       .getPublicKey(keyIndex)
       .call()) as bigint[];
