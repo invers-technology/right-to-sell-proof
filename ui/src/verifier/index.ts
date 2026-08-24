@@ -16,9 +16,9 @@ import {
 } from "rts-core";
 
 const base64Alphabet =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-const fixedBase64ToNumber = (encoded: string) => {
+export const fixedBase64ToNumber = (encoded: string) => {
   return [...encoded].reduce((acc, char) => {
     const value = base64Alphabet.indexOf(char);
     if (value < 0) {

@@ -19,9 +19,12 @@ const normalizeRoot = (root: string | bigint) => {
 };
 
 const base64Alphabet =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-const numberToFixedBase64 = (value: number | bigint, length: number) => {
+export const numberToFixedBase64Url = (
+  value: number | bigint,
+  length: number,
+) => {
   const remaining = BigInt(value);
   const max = 1n << BigInt(length * 6);
   if (remaining < 0n || remaining >= max) {
@@ -89,13 +92,16 @@ export class Prover {
     let encodedProof = await encodeProof(proof);
     const publicKey = publicSignals.slice(1, 18).map(BigInt);
     const publicKeyIndex = Brand.getPublicKeyIndex(publicKey);
-    const keyIndex = numberToFixedBase64(
+    const keyIndex = numberToFixedBase64Url(
       publicKeyIndex,
       PROOF_PUBLIC_KEY_INDEX_LENGTH,
     );
     const root = publicSignals[0];
     const rootIndex = await this.getRootVersion(root);
-    const rtIndex = numberToFixedBase64(rootIndex, PROOF_ROOT_VERSION_LENGTH);
+    const rtIndex = numberToFixedBase64Url(
+      rootIndex,
+      PROOF_ROOT_VERSION_LENGTH,
+    );
     encodedProof += keyIndex;
     encodedProof += rtIndex;
     return encodedProof;

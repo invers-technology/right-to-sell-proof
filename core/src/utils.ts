@@ -6,16 +6,21 @@ import {
 } from "./constants";
 import { AsciiField, LidFields, LidHashInputs, Proof } from "./type";
 
-const bytesToBase64 = (bytes: Uint8Array): string => {
+export const bytesToBase64Url = (bytes: Uint8Array): string => {
   let binary = "";
   for (let i = 0; i < bytes.length; i++) {
     binary += String.fromCharCode(bytes[i]);
   }
-  return btoa(binary);
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 };
 
-const base64ToBytes = (base64: string): Uint8Array => {
-  const binary = atob(base64);
+export const base64UrlToBytes = (base64url: string): Uint8Array => {
+  const base64 = base64url.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+  const binary = atob(padded);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {
     bytes[i] = binary.charCodeAt(i);
@@ -91,19 +96,14 @@ export const encodeProof = async (proof: Proof): Promise<string> => {
   buf.set(bComp, 32);
   buf.set(cComp, 96);
 
-  // Strip trailing "=" padding — consistent with old per-element approach.
-  // 128 bytes → 256 hex chars → 171 base64 chars (256 × 2/3).
-  return bytesToBase64(buf).replace(/=+$/, "");
+  return bytesToBase64Url(buf);
 };
 
 export const decodeProof = async (encodedProof: string): Promise<Proof> => {
   const { curves } = (await import("snarkjs")) as any;
   const bn128 = await curves.getCurveFromName("bn128");
 
-  // Restore standard base64 padding before decoding.
-  // 128 bytes → 171 unpadded chars (171 % 4 === 3 → needs 1 "=").
-  const padded = encodedProof + "=".repeat((4 - (encodedProof.length % 4)) % 4);
-  const buf = base64ToBytes(padded);
+  const buf = base64UrlToBytes(encodedProof);
 
   // G1 pi_a: bytes 0–31
   const objA = bn128.G1.toObject(bn128.G1.fromRprCompressed(buf, 0));
